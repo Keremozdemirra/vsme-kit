@@ -24,17 +24,14 @@ class Packaging(unittest.TestCase):
         plugin, server = json.loads(read(".claude-plugin/plugin.json")), json.loads(read("server.json"))
         v = vsme_kit.VERSION
         self.assertIn(f'version = "{v}"', read("pyproject.toml"))
-        self.assertEqual((plugin["version"], server["version"], server["packages"][0]["version"]), (v, v, v))
-        self.assertIn(f"vsme-kit@{v}", read("README.md"))
+        self.assertEqual((plugin["version"], server["version"]), (v, v))
 
     def test_registry_listing(self):
         server = json.loads(read("server.json"))
         self.assertEqual(server["name"], NAME)
         self.assertLess(len(server["description"]), 100)
-        pkg = server["packages"][0]
-        self.assertEqual((pkg["registryType"], pkg["identifier"], pkg["runtimeHint"], pkg["transport"]["type"]),
-                         ("pypi", "vsme-kit", "uvx", "stdio"))
-        self.assertEqual(pkg["packageArguments"], [{"type": "positional", "value": "mcp"}])
+        self.assertNotIn("packages", server)  # not on PyPI; installed from GitHub
+        self.assertIn("uvx --from git+https://github.com/Keremozdemirra/vsme-kit vsme-kit mcp", read("README.md"))
         self.assertIn(f"<!-- mcp-name: {NAME} -->", read("README.md"))
 
     def test_plugin_and_marketplace(self):

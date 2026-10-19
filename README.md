@@ -84,10 +84,10 @@ the other one. EFRAG says an updated template for the 2026 standard "is schedule
 
 ## Install
 
-As an MCP server (Claude Code):
+Nothing is published to PyPI; every install runs straight from GitHub. As an MCP server (Claude Code):
 
 ```bash
-claude mcp add vsme-kit -- uvx vsme-kit@0.1.0 mcp
+claude mcp add vsme-kit -- uvx --from git+https://github.com/Keremozdemirra/vsme-kit vsme-kit mcp
 ```
 
 As a Claude Code plugin (a skill; no hooks, no server):
@@ -100,15 +100,18 @@ As a Claude Code plugin (a skill; no hooks, no server):
 Then ask "help me fill the VSME" or "check our VSME report at ~/Downloads/vsme.xlsx".
 The skill runs `vsme-kit.py` from the plugin directory with `python3`.
 
-Command line, pinned to a release:
+Command line:
 
 ```bash
-uvx vsme-kit@0.1.0 disclosures --module basic
-pipx run --spec vsme-kit==0.1.0 vsme-kit check filled-template.xlsx
+uvx --from git+https://github.com/Keremozdemirra/vsme-kit vsme-kit disclosures --module basic
+uvx --from git+https://github.com/Keremozdemirra/vsme-kit vsme-kit check filled-template.xlsx
 ```
 
-`uvx vsme-kit` without a version installs the newest release the first time and uses uv's
-cached copy after that; `uvx vsme-kit@latest` refreshes it.
+To install it instead: `pipx install git+https://github.com/Keremozdemirra/vsme-kit` or `pip install git+https://github.com/Keremozdemirra/vsme-kit`. From a checkout:
+
+```bash
+git clone https://github.com/Keremozdemirra/vsme-kit && cd vsme-kit && pip install .
+```
 
 ## Commands
 
