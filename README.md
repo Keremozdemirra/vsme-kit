@@ -126,7 +126,7 @@ git clone https://github.com/Keremozdemirra/vsme-kit && cd vsme-kit && pip insta
 
 Every command takes `--json` or `--markdown`. Exit codes: 0 normally; with `--strict`,
 `check` exits 1 when a disclosure is missing or inconsistent; 2 when a file cannot be checked
-(no such file, not an xlsx, damaged, password-protected, not the VSME template), for an unknown
+(no such file; a damaged, password-protected or non-xlsx file; a workbook other than the VSME template), for an unknown
 disclosure code, or when `refresh` fails.
 
 MCP tools: `vsme_disclosures(module, edition)`, `disclosure(code, edition, guidance)`,
@@ -143,7 +143,7 @@ information to provide an energy consumption breakdown?") have no name, so they 
 their label: the language-independent key in the label's formula, or the English text in
 versions before 1.1.0. No sheet, row or column position is assumed. Tested against EFRAG's
 templates 1.0.0, 1.0.1, 1.1.0, 1.1.1, 1.2.0 and 1.3.0 (downloaded 2026-09-24). A newer version is
-read the same way; what cannot be found is listed as "not located", never as missing. Extra
+read the same way; what cannot be found is listed as "not located" and is not counted as missing. Extra
 sheets are ignored.
 
 Per disclosure the result is `filled`, `missing` (with the datapoints), `depends` (with the
@@ -151,7 +151,7 @@ question that settles it), `not applicable` (the template's own question answere
 unanswered, which paragraph 13 treats as "not applicable"; or Option A, so no Comprehensive
 Module), `omitted` (ticked as classified or sensitive, paragraph 19) or `inconsistent`.
 
-`depends` is used when the answer needs a fact the workbook does not settle, never as a guess:
+`depends` is used when the answer needs a fact the workbook does not settle:
 the module option is empty or not one of Option A and B; the number of employees is in
 full-time equivalents below a threshold that counts heads (paragraph 40: 50 employees; paragraph
 42(b): a headcount of 150); site addresses are given without coordinates, which the template
@@ -160,7 +160,7 @@ that Delegated Regulation (EU) 2026/1560 does not (the turnover rate moved to C5
 required only where law already requires it, training hours need no gender breakdown, sites in
 biodiversity-sensitive areas need no area). The check's output says which edition its paragraph
 numbers belong to and quotes recital 5 of Regulation 2026/1560. `--strict` fails on `missing`
-and `inconsistent`, not on `depends`. The consistency checks, each citing Recommendation
+and `inconsistent` only. The consistency checks, each citing Recommendation
 (EU) 2025/1710:
 
 | Check | Rests on |
@@ -179,7 +179,7 @@ and `inconsistent`, not on `depends`. The consistency checks, each citing Recomm
 | Quantities not negative; numbers not typed as text with a unit ("1250 kWh") | the paragraph of each datapoint |
 
 Two figures count as equal when they differ by at most 0.5 % of the larger or 0.01. That
-tolerance is this tool's choice, not a VSME rule. Percentages are stored in the template as
+tolerance is this tool's own choice. Percentages are stored in the template as
 fractions (0.25 is 25 %). The template's own validation status is shown as saved in the file;
 it can differ from this check (EFRAG's formulas flag an energy breakdown only when it exceeds
 the total). Formulas are never evaluated: the check uses the results the spreadsheet program
